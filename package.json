@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/uramen/grabber#readme",
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "mongodb-autoincrement": "^1.0.1",
+    "mongoose": "^4.9.7",
     "vksdk": "^5.3.2"
   }
 }

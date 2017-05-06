@@ -8,6 +8,8 @@ var vk = new VK({
   'language'  : 'ru'
 });
 
+var groupsIds = ["casablanca77", "pidsluhanochernivtsi"];
+
 var Post = require('./models/posts');
 
 var access_token = 'c4526179c4526179c452617929c409a901cc452c45261799d5b8de53513ab100b1fe811';
@@ -47,17 +49,34 @@ vk.setToken(access_token);
 
 // Request 'users.get' method
 vk.request('wall.get', {'owner_id' : 177467237, count: 1}, function(_o) {
-  console.log(_o);
-  console.log(_o.response.items);
-  var fItem = _o.response.items[0];
-  console.log(fItem.attachments);
+  // console.log(_o);
+  // console.log(_o.response.items);
+  // var fItem = _o.response.items[0];
+  // console.log(fItem.attachments);
 
-  var post = new Post({
-    text: fItem.text
-  });
+  // var post = new Post({
+  //   text: fItem.text
+  // });
 
   // post.save()
   //   .then(function() {
   //     console.log('post successfully saved!');
   //   });
+});
+
+vk.request('groups.getById', {
+  group_ids: groupsIds.join(',')
+}, function(answer) {
+  var res = answer.response;
+
+  if (res) {
+    res.forEach(function(group) {
+      vk.request('wall.get', {
+        owner_id: -Math.abs(group.id),
+        count: 1
+      }, function(posts) {
+        console.log(posts);
+      });
+    });
+  }
 });
