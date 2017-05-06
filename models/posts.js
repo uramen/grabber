@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose      = require('mongoose');
 var autoIncrement = require('mongodb-autoincrement');
 
 /**
@@ -8,10 +8,31 @@ const PostsSchema = new mongoose.Schema({
   _id: {
     type: Number
   },
+  post_id: {
+    type: Number,
+    required: true,
+    index: {unique: true}
+  },
+  group_id: {
+    type: Number,
+    required: true
+  },
+  user_id: {
+    type: Number,
+    required: true
+  },
+  date: {
+    type: Number,
+    required: true
+  },
   text: {
     type: String,
     required: true
   },
+  attachments: {
+    type: Object,
+    required: true
+  }
 }, {_id: false});
 
 /**
