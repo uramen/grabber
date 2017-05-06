@@ -17,8 +17,8 @@ mongoose.connection.on('error', function() {
   winston.error(winston.exception.getAllInfo(err));
 });
 
-schedule.scheduleJob('*/1 * * * *', function() {
-  console.log('Today is recognized by Rebecca Black!');
+// Running script every one hour
+schedule.scheduleJob('*/60 * * * *', function() {
   worker.start();
 });
 
