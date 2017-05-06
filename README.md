@@ -1,4 +1,6 @@
-# grabber
+# Grabber
+
+### Approximate structure for every posts in DB
 
 ```
 { 
