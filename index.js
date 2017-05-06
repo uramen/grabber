@@ -1,26 +1,30 @@
-var VK = require('vksdk');
+var VK       = require('vksdk');
 var mongoose = require('mongoose');
-var config = require('./config');
-var Promise = require('bluebird');
-var vk = new VK({
-  'appId'     : 6015096,
-  'appSecret' : 'lpNkoSBzUFjCtBsYZWpV',
-  'language'  : 'ru'
+var Promise  = require('bluebird');
+var winston  = require('winston');
+var Post     = require('./models/posts');
+var config   = require('./config');
+
+// Set up logging
+winston.add(winston.transports.File, {filename: 'logfile.log'});
+winston.remove(winston.transports.Console);
+
+// Set up mongoose
+mongoose.Promise = Promise;
+mongoose.connect(config.db, {server: {socketOptions: {keepAlive: 1}}});
+mongoose.connection.on('error', function() {
+  var err = new Error('unable to connect to database: ' + config.db);
+  winston.error(winston.exception.getAllInfo(err));
 });
 
-var groupsIds = ["casablanca77", "pidsluhanochernivtsi"];
-
-var Post = require('./models/posts');
-
+// Configs
+var groupsIds    = ["casablanca77", "pidsluhanochernivtsi"];
 var access_token = 'c4526179c4526179c452617929c409a901cc452c45261799d5b8de53513ab100b1fe811';
 
-// plugin bluebird promise in mongoose
-mongoose.Promise = Promise;
-
-// connect to mongo db
-mongoose.connect(config.db, { server: { socketOptions: { keepAlive: 1 } } });
-mongoose.connection.on('error', function() {
-  throw new Error('unable to connect to database: ' + config.db);
+var vk = new VK({
+  'appId': 6015096,
+  'appSecret': 'lpNkoSBzUFjCtBsYZWpV',
+  'language': 'ru'
 });
 
 /**
@@ -48,7 +52,7 @@ vk.request('secure.getSMSHistory', {}, function(_dd) {
 vk.setToken(access_token);
 
 // Request 'users.get' method
-vk.request('wall.get', {'owner_id' : 177467237, count: 1}, function(_o) {
+vk.request('wall.get', {'owner_id': 177467237, count: 1}, function(_o) {
   // console.log(_o);
   // console.log(_o.response.items);
   // var fItem = _o.response.items[0];
